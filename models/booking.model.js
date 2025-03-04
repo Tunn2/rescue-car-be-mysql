@@ -3,6 +3,7 @@ const User = require("./user.model");
 const sequelize = require("../configs/database");
 const Car = require("./car.model");
 const Service = require("./service.model");
+const moment = require("moment-timezone");
 
 const Booking = sequelize.define(
   "Booking",
@@ -75,7 +76,7 @@ const Booking = sequelize.define(
         "IN-PROGRESS",
         "PENDING_PAYMENT",
         "FINISHED",
-        "CANCELED"
+        "CANCELLED"
       ),
       defaultValue: "PENDING",
     },
@@ -97,7 +98,7 @@ const Booking = sequelize.define(
     },
     bookingDate: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      defaultValue: () => moment().tz("Asia/Bangkok").toDate(),
     },
   },
   {

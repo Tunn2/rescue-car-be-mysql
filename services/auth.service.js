@@ -69,6 +69,33 @@ const registerService = async ({ fullName, password, email, phone, role }) => {
   return true;
 };
 
+const registerForAdminService = async ({
+  fullName,
+  password,
+  email,
+  phone,
+  role,
+}) => {
+  const isExistedEmail = await checkEmailExist(email);
+  if (isExistedEmail) throw new Error("Email này đã được sử dụng");
+  const hashedPassword = await bcrypt.hash(password, 10);
+  let user = null;
+  if (role) {
+    user = await User.create({
+      fullName,
+      password: hashedPassword,
+      email,
+      phone,
+      role,
+      isActive: true,
+    });
+  }
+
+  delete user.dataValues.password;
+
+  return user;
+};
+
 // const refreshTokenService = async (refreshToken) => {
 //   const decodedToken = jwt.verify(refreshToken, process.env.JWT_SECRET);
 //   const { _id } = decodedToken;
@@ -96,5 +123,6 @@ const checkEmailExist = async (email) => {
 module.exports = {
   loginService,
   registerService,
+  registerForAdminService,
   // refreshTokenService,
 };

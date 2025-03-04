@@ -1,4 +1,8 @@
-const { registerService, loginService } = require("../services/auth.service");
+const {
+  registerService,
+  loginService,
+  registerForAdminService,
+} = require("../services/auth.service");
 
 const loginController = async (req, res) => {
   try {
@@ -12,7 +16,7 @@ const loginController = async (req, res) => {
 
 const registerController = async (req, res) => {
   try {
-    const { fullName, phone, email, password, role } = req.body;
+    const { fullName, phone, email, password } = req.body;
     await registerService({ fullName, phone, email, password });
     return res.send({
       message:
@@ -23,9 +27,26 @@ const registerController = async (req, res) => {
   }
 };
 
+const registerForAdminController = async (req, res) => {
+  try {
+    const { fullName, phone, email, password, role } = req.body;
+    const result = await registerForAdminService({
+      fullName,
+      phone,
+      email,
+      password,
+      role,
+    });
+    return res.send({ status: 200, result });
+  } catch (error) {
+    return res.send({ errorCode: 1, message: error.message });
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
+  registerForAdminController,
   // refreshTokenController,
   // registerForAdminController,
 };

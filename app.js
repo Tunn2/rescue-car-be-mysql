@@ -9,6 +9,8 @@ const carRoute = require("./routes/car.route");
 const packageRoute = require("./routes/package.route");
 const serviceRoute = require("./routes/service.route");
 const paymentRoute = require("./routes/order.route");
+const bookingRoute = require("./routes/booking.route");
+const userRoute = require("./routes/user.route");
 var app = express();
 
 // view engine setup
@@ -27,6 +29,8 @@ app.use("/api/cars", carRoute);
 app.use("/api/packages", packageRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/bookings", bookingRoute);
+app.use("/api/users", userRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

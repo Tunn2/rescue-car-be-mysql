@@ -19,6 +19,9 @@ const authenticate = (req, res, next) => {
 
 const checkStaffsRole = async (req, res, next) => {
   const user = await findUserByIdService(req.userId);
+  if (user.role === "ADMIN" || user.role === "MANAGER") {
+    return next();
+  }
   if (user.role === "STAFF") {
     return next();
   }

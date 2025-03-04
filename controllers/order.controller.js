@@ -51,7 +51,6 @@ const createPaymentForPackageController = async (req, res) => {
       vnp_CreateDate: dateFormat(new Date()),
       vnp_ExpireDate: dateFormat(tomorrow),
     });
-    console.log(packageId, carId);
 
     return res.json({ status: 200, result: paymentUrl });
   } catch (error) {
@@ -83,7 +82,7 @@ const createPaymentForBookingController = async (req, res) => {
       vnp_ExpireDate: dateFormat(tomorrow),
     });
 
-    return res.json({ paymentUrl });
+    return res.json({ status: 200, result: paymentUrl });
   } catch (error) {
     return res.status(500).json({ errorCode: 1, message: error.message });
   }

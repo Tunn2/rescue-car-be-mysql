@@ -2,10 +2,15 @@ const express = require("express");
 const {
   registerController,
   loginController,
+  registerForAdminController,
 } = require("../controllers/auth.controller");
 const authRoute = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const {
+  authenticate,
+  checkAdminRole,
+} = require("../middlewares/auth.middleware");
 
 authRoute.post("/register", registerController);
 authRoute.post("/login", loginController);
@@ -31,5 +36,9 @@ authRoute.get("/verify/:token", async (req, res) => {
     res.status(400).json({ message: "Xác thực thất bại hoặc token hết hạn" });
   }
 });
+
+authRoute.use(authenticate);
+authRoute.use(checkAdminRole);
+authRoute.post("/admin/register", registerForAdminController);
 
 module.exports = authRoute;

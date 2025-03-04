@@ -1,6 +1,3 @@
-// const Car = require("../models/Car");
-// const Package = require("../models/Package");
-
 const Car = require("../models/car.model");
 const Package = require("../models/package.model");
 
@@ -39,10 +36,9 @@ const createCarService = async ({
 const getCarByUserIdService = async (userId) => {
   const cars = await Car.findAll({
     where: { userId },
-    // include: [{ model: Package, as: "package" }],
-    raw: true,
+    include: [{ model: Package, as: "package" }],
+    // raw: true,
   });
-  console.log(cars);
   return cars;
 };
 
