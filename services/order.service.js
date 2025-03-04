@@ -1,4 +1,5 @@
 const Booking = require("../models/booking.model");
+const Car = require("../models/car.model");
 const Order = require("../models/order.model");
 const Package = require("../models/package.model");
 const moment = require("moment-timezone");

@@ -51,6 +51,7 @@ const createPaymentForPackageController = async (req, res) => {
       vnp_CreateDate: dateFormat(new Date()),
       vnp_ExpireDate: dateFormat(tomorrow),
     });
+    console.log(packageId, carId);
 
     return res.json({ status: 200, result: paymentUrl });
   } catch (error) {
