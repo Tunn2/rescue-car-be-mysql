@@ -42,6 +42,16 @@ const getCarByUserIdService = async (userId) => {
   return cars;
 };
 
+const updateCarByIdService = async ({ carId, color }) => {
+  const [updatedRows] = await Car.update({ color }, { where: { id: carId } });
+
+  if (updatedRows === 0) {
+    throw new Error("Car not found or no changes made");
+  }
+
+  return true;
+};
+
 const checkCarExist = async ({ licensePlate }) => {
   const car = await Car.findOne({
     where: { licensePlate },
@@ -55,4 +65,5 @@ module.exports = {
   deleteCarByIdService,
   createCarService,
   getCarByUserIdService,
+  updateCarByIdService,
 };

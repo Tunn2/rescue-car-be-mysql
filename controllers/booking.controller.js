@@ -5,7 +5,17 @@ const {
   getBookingsByStaffsIdService,
   updateBookingStatusByIdService,
   getBookingsByUserIdService,
+  getBookingByIdService,
 } = require("../services/booking.service");
+
+const getBookingByIdController = async (req, res) => {
+  try {
+    const result = await getBookingByIdService(req.params.bookingId);
+    return res.send({ status: 200, result });
+  } catch (error) {
+    return res.send({ errorCode: 1, message: error.message });
+  }
+};
 
 const getBookingsByUserIdController = async (req, res) => {
   try {
@@ -91,4 +101,5 @@ module.exports = {
   getBookingsByStaffsIdController,
   updateBookingStatusByIdController,
   getBookingsByUserIdController,
+  getBookingByIdController,
 };

@@ -113,7 +113,6 @@ Booking.belongsTo(User, { foreignKey: "staff1Id", as: "staff1" });
 Booking.belongsTo(User, { foreignKey: "staff2Id", as: "staff2" });
 Booking.belongsTo(Car, { foreignKey: "carId", as: "car" });
 
-// Thiết lập Many-to-Many với Service
 Booking.belongsToMany(Service, { through: "Booking_Services", as: "services" });
 
 module.exports = Booking;

@@ -12,12 +12,14 @@ const {
   getBookingsByStaffsIdController,
   updateBookingStatusByIdController,
   getBookingsByUserIdController,
+  getBookingByIdController,
 } = require("../controllers/booking.controller");
 const bookingRoute = express.Router();
 
 bookingRoute.use(authenticate);
 bookingRoute.post("/", createBookingController);
 bookingRoute.get("/user", getBookingsByUserIdController);
+bookingRoute.get("/:bookingId", getBookingByIdController);
 
 bookingRoute.get(
   "/staff/:staffId",

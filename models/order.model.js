@@ -4,13 +4,14 @@ const User = require("./user.model");
 const Package = require("./package.model");
 const Car = require("./car.model");
 const Booking = require("./booking.model");
+const moment = require("moment-timezone");
 
 const Order = sequelize.define(
   "Order",
   {
     id: {
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4, // Tạo UUID tự động
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
     userId: {
@@ -23,7 +24,7 @@ const Order = sequelize.define(
     },
     packageId: {
       type: DataTypes.UUID,
-      allowNull: true, // Không required như trong Mongoose
+      allowNull: true,
       references: {
         model: Package,
         key: "id",
@@ -55,13 +56,20 @@ const Order = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM("PENDING", "FINISHED"),
+      type: DataTypes.ENUM("PENDING", "FINISHED", "CANCELLED"),
       defaultValue: "PENDING",
     },
   },
   {
     timestamps: true, // Tự động tạo createdAt và updatedAt
     tableName: "orders",
+    hooks: {
+      beforeCreate: (order) => {
+        const now = moment().tz("Asia/Bangkok").toDate();
+        order.createdAt = now;
+        order.updatedAt = now;
+      },
+    },
   }
 );
 

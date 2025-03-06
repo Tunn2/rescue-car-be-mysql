@@ -47,8 +47,8 @@ const User = sequelize.define(
     },
   },
   {
-    timestamps: true, // Tự động tạo createdAt và updatedAt
-    tableName: "users", // Tên bảng trong MySQL
+    timestamps: true,
+    tableName: "users",
   }
 );
 

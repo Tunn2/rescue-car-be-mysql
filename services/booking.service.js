@@ -5,6 +5,18 @@ const Booking = require("../models/booking.model");
 const Service = require("../models/service.model");
 const Package = require("../models/package.model");
 const moment = require("moment-timezone");
+
+const getBookingByIdService = async (bookingId) => {
+  return await Booking.findByPk(bookingId, {
+    include: [
+      { model: User, as: "staff1", attributes: ["id", "fullName", "phone"] },
+      { model: User, as: "staff2", attributes: ["id", "fullName", "phone"] },
+      { model: User, as: "user", attributes: ["id", "fullName", "phone"] },
+      { model: Service, as: "services", attributes: ["id", "name", "price"] },
+    ],
+  });
+};
+
 const getBookingsByUserIdService = async (userId) => {
   return await Booking.findAll({
     where: { userId },
@@ -49,7 +61,16 @@ const updateBookingStatusByIdService = async ({
       { where: { id: bookingId } }
     );
   } else if (status === "PENDING_PAYMENT") {
-    await Booking.update({ services }, { where: { id: bookingId } });
+    console.log(services); // services là một mảng chứa ID của các dịch vụ
+
+    const booking = await Booking.findByPk(bookingId);
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
+
+    await booking.setServices(services);
+
+    console.log("Updated services for booking:", bookingId);
 
     const foundBooking = await Booking.findOne({
       where: { id: bookingId },
@@ -193,4 +214,5 @@ module.exports = {
   getBookingsByStaffsIdService,
   updateBookingStatusByIdService,
   getBookingsByUserIdService,
+  getBookingByIdService,
 };

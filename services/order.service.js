@@ -3,6 +3,43 @@ const Car = require("../models/car.model");
 const Order = require("../models/order.model");
 const Package = require("../models/package.model");
 const moment = require("moment-timezone");
+const cron = require("node-cron");
+const { Op } = require("sequelize");
+
+cron.schedule("* * * * *", async () => {
+  console.log("🔍 Kiểm tra đơn hàng chưa thanh toán...");
+
+  const now = new Date();
+  const expirationTime = new Date(now.getTime() - 2 * 60 * 1000);
+
+  try {
+    const expiredOrders = await Order.findAll({
+      where: {
+        status: "PENDING",
+        createdAt: { [Op.lt]: expirationTime },
+      },
+    });
+
+    if (expiredOrders.length > 0) {
+      await Order.update(
+        { status: "CANCELLED" },
+        {
+          where: {
+            id: expiredOrders.map((order) => order.id),
+          },
+        }
+      );
+      console.log(
+        `✅ Đã hủy ${expiredOrders.length} đơn hàng chưa thanh toán.`
+      );
+    } else {
+      console.log("✅ Không có đơn hàng nào cần hủy.");
+    }
+  } catch (error) {
+    console.error("❌ Lỗi khi cập nhật đơn hàng:", error);
+  }
+});
+
 const getOrderByIdService = async (orderId) => {
   if (!orderId) throw new Error("ID không hợp lệ");
 
